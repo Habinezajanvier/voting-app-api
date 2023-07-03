@@ -20,8 +20,14 @@ const schema = buildSchema(`
         country: String
     }
 
+    type AuthData {
+        message: String!
+        token: String!
+        data: User!
+    }
+
     type Mutation {
-        createUser(input: SignupData!): User
+        createUser(input: SignupData!): AuthData
         updateUser(id: Int!, input: SignupData): User
     }
 

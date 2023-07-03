@@ -3,9 +3,12 @@ export type User = {
   firstname: string;
   lastname: string;
   email: string;
-  password?: string;
-  country?: string;
+  password: string;
+  country: string;
   phoneNumber: string;
 };
 
-export type UserInput = Pick<User, "email" | "phoneNumber">;
+export type UserInput = Pick<
+  User,
+  "email" | "phoneNumber" | "country" | "firstname" | "lastname" | "password"
+>;
