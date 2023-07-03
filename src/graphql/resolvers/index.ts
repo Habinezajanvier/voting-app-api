@@ -1,5 +1,8 @@
 import { User, UserInput } from "../../types";
 import prisma from "../../db/prisma";
+import controllers from "../../controllers";
+
+const { auth } = controllers;
 
 const { user } = prisma;
 
@@ -13,10 +16,11 @@ class UserResolvers {
   }
 
   async createUser(args: { input: UserInput }) {
-    const newUser = await user.create({
-      data: { ...args.input },
-    });
-    return newUser;
+    return await auth.signup(args.input);
+  }
+
+  async userLogin(args: { input: UserInput }) {
+    return await auth.login(args.input);
   }
 }
 
