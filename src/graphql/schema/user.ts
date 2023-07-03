@@ -15,6 +15,16 @@ const schema = buildSchema(`
         password: String!
     }
 
+    type Error {
+        error: String!
+        status: String!
+    }
+
+    interface Response {
+       status: String!
+       message: String! 
+    }
+
     type User {
         id: Int!
         firstname: String!
@@ -25,15 +35,18 @@ const schema = buildSchema(`
         country: String
     }
 
-    type AuthData {
-        message: String!
+    type AuthData implements Response {
         token: String!
         data: User!
+        status: String!
+        message: String!
     }
 
+    union AuthResponse = AuthData | Error
+
     type Mutation {
-        createUser(input: SignupData!): AuthData
-        userLogin(input: LoginData!): AuthData
+        createUser(input: SignupData!): AuthResponse
+        userLogin(input: LoginData!): AuthResponse
         updateUser(id: Int!, input: SignupData): User
     }
 

@@ -1,5 +1,5 @@
 import services from "../services";
-import { User, UserInput } from "../types";
+import { UserInput, Status, Typename, AuthData, Error } from "../types";
 import bcrypt from "bcrypt";
 import { encode } from "../helper/jwtToken";
 
@@ -11,12 +11,25 @@ export default class AuthController {
    * @param input
    * @returns
    */
-  signup = async (input: UserInput) => {
+  signup = async (input: UserInput): Promise<AuthData | Error> => {
+    const findUser = await userServices.getUserByEmail(input.email);
+    if (findUser)
+      return {
+        __typename: Typename.ERROR,
+        status: Status.EMAIL_CONFLICT,
+        error: "Email already exist",
+      };
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(input.password, salt);
     const user = await userServices.createUser({ ...input, password: hash });
     const token = encode({ id: user.id, email: user.email });
-    return { message: "User created successfully", token, data: user };
+    return {
+      __typename: Typename.AUTH,
+      status: Status.SUCCESS,
+      message: "User created successfully",
+      token,
+      data: user,
+    };
   };
 
   /**
@@ -24,13 +37,28 @@ export default class AuthController {
    * @param input
    * @returns
    */
-  login = async (input: UserInput) => {
+  login = async (input: UserInput): Promise<AuthData | Error> => {
     const user = await userServices.getUserByEmail(input.email);
-    if (!user) return { status: "USER_EXIST", error: "User already exist" };
+    if (!user)
+      return {
+        __typename: Typename.ERROR,
+        status: Status.PASSWORD_CONFLICT,
+        error: "Password or email does not exist",
+      };
     const pass = await bcrypt.compare(input.password, user?.password as string);
     if (!pass)
-      return { status: "PASSWORD_FAILED", error: "Password doesn't match" };
+      return {
+        __typename: Typename.ERROR,
+        status: Status.PASSWORD_CONFLICT,
+        error: "Password or email does not exist",
+      };
     const token = encode({ id: user?.id, email: user?.email });
-    return { message: "User loged in successfully", token, data: user };
+    return {
+      __typename: Typename.AUTH,
+      message: "User loged in successfully",
+      token,
+      data: user,
+      status: Status.SUCCESS,
+    };
   };
 }
