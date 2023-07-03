@@ -1,6 +1,11 @@
 export type User = {
-  name: string;
+  id?: number;
+  firstname: string;
+  lastname: string;
   email: string;
+  password?: string;
+  country?: string;
+  phoneNumber: string;
 };
 
-export type UserInput = Pick<User, "email" | "name">;
+export type UserInput = Pick<User, "email" | "phoneNumber">;
