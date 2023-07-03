@@ -10,6 +10,11 @@ const schema = buildSchema(`
         phoneNumber: String!
     }
 
+    input LoginData {
+        email: String!
+        password: String!
+    }
+
     type User {
         id: Int!
         firstname: String!
@@ -28,6 +33,7 @@ const schema = buildSchema(`
 
     type Mutation {
         createUser(input: SignupData!): AuthData
+        userLogin(input: LoginData!): AuthData
         updateUser(id: Int!, input: SignupData): User
     }
 

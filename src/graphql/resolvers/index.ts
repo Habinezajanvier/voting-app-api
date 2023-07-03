@@ -18,6 +18,10 @@ class UserResolvers {
   async createUser(args: { input: UserInput }) {
     return await auth.signup(args.input);
   }
+
+  async userLogin(args: { input: UserInput }) {
+    return await auth.login(args.input);
+  }
 }
 
 const root = new UserResolvers();

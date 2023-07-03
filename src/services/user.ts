@@ -8,4 +8,8 @@ export default class UserServices {
     const newUser = await user.create({ data });
     return newUser;
   };
+
+  getUserByEmail = async (email: string) => {
+    return await user.findUnique({ where: { email } });
+  };
 }
