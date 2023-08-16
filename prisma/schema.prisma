@@ -11,12 +11,39 @@ datasource db {
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  email        String  @unique
-  firstname    String
-  lastname     String
-  password     String
-  phoneNumber  String
-  country      String
-  profileImage String?
+  id            Int                @id @default(autoincrement())
+  email         String             @unique
+  firstname     String
+  lastname      String
+  password      String
+  phoneNumber   String
+  country       String
+  profileImage  String?
+  organisations UserOrganisation[]
+  organisation  Organisation[]
+  createdAt     DateTime?          @default(now())
+  updatedAt     DateTime?
+}
+
+model Organisation {
+  id          Int                @id @default(autoincrement())
+  logo        String?
+  name        String
+  description String?
+  users       UserOrganisation[]
+  createdBy   Int
+  owner       User               @relation(fields: [createdBy], references: [id])
+  createdAt   DateTime?          @default(now())
+  updatedAt   DateTime?
+}
+
+model UserOrganisation {
+  organisationId Int
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  userId         Int
+  user           User         @relation(fields: [userId], references: [id])
+  createdAt      DateTime?    @default(now())
+  updatedAt      DateTime?
+
+  @@id([organisationId, userId])
 }

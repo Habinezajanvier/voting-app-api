@@ -10,6 +10,12 @@ const schema = buildSchema(`
         phoneNumber: String!
     }
 
+    input createOrganisation {
+        name: String!
+        logo: String
+        description: String
+    }
+
     input LoginData {
         email: String!
         password: String!
