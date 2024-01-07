@@ -1,5 +1,7 @@
 import { Router, Request, Response } from "express";
 import authRouter from "./auth";
+import userRouter from "./user";
+import organisationRouter from "./organisation";
 
 const router: Router = Router();
 
@@ -9,5 +11,7 @@ router.get("/", (_req: Request, res: Response) => {
 
 // All routes handler should be here
 router.use("/auth", authRouter);
+router.use("/users", userRouter);
+router.use("/organisations", organisationRouter);
 
 export default router;

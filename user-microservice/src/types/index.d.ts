@@ -6,3 +6,10 @@ export type UserType = {
   password: string;
   country: string;
 };
+
+export type OrganisationType = {
+  logo?: string;
+  name: string;
+  description: string;
+  createdBy: number;
+};
